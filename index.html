@@ -12,7 +12,7 @@
         :root { --primary-blue: #004a99; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #eceff1; }
         
-        /* === إعدادات الصفحة والطباعة === */
+        /* === إعدادات الصفحة (للعرض على الشاشة) === */
         .printable-page { 
             background: white; 
             width: 210mm; 
@@ -24,56 +24,58 @@
             box-sizing: border-box;
         }
         
-        /* إخفاء السهم في القوائم المنسدلة نهائياً */
+        /* === إعدادات الطباعة الصارمة (لحل مشكلة الصفحات الفارغة) === */
+        @media print {
+            @page { margin: 5mm; size: auto; } /* هوامش صغيرة للطابعة */
+            body { margin: 0; background: white; height: auto; }
+            .printable-page { 
+                margin: 0; 
+                border: none; 
+                width: 100%; 
+                min-height: auto; /* مهم جداً: إلغاء الارتفاع الثابت */
+                height: auto; 
+                box-shadow: none; 
+                padding: 0;
+            }
+            .no-print, .user-credit, #dlBtn, .delete-col, .plan-select { display: none !important; }
+            .action-textarea { border: none; resize: none; overflow: hidden; }
+            .sig-input { border: none; }
+            td.delete-col, th.delete-col { display: none; }
+            thead { display: table-header-group; }
+            
+            /* إجبار عدم وجود صفحات فارغة */
+            html, body { height: auto; overflow: visible; }
+            * { page-break-after: auto; }
+        }
+
+        /* تنسيقات العناصر */
         .clean-select {
             appearance: none; -webkit-appearance: none; -moz-appearance: none;
-            background: transparent !important;
-            background-image: none !important; /* لإلغاء أيقونات بوتستراب */
-            border: none;
-            padding: 0; margin: 0;
-            font-weight: bold; font-size: inherit;
-            color: #000;
-            cursor: pointer;
-            width: auto;
-            text-align: right;
+            background: transparent !important; border: none;
+            padding: 0; margin: 0; font-weight: bold; font-size: inherit;
+            color: #000; cursor: pointer; width: auto; text-align: right;
         }
         .clean-select:focus { outline: none; }
 
-        /* ترويسة الصفحة */
         .header-table { width: 100%; border: 2px solid var(--primary-blue); margin-bottom: 5px; direction: rtl; }
         .header-table td { border: 1px solid var(--primary-blue); padding: 5px; text-align: center; vertical-align: middle; font-size: 13px; }
         
-        /* العناوين */
         .report-main-title { font-size: 18px; font-weight: bold; text-align: center; margin: 10px 0; border: 2px solid #000; padding: 6px; background: #f5f5f5; }
         .plan-main-title { width: 100%; border: none; font-size: 16px; font-weight: bold; text-align: center; background: #e8f5e9; padding: 5px; margin-bottom: 5px; text-decoration: underline; margin-top: 10px;}
 
-        /* الجدول الرئيسي للتحليل */
         .main-table { width: 100%; border-collapse: collapse; margin-top: 5px; table-layout: fixed; }
         .main-table th, .main-table td { border: 1px solid #000; padding: 3px; text-align: center; font-size: 12px; vertical-align: middle; }
         .main-table th { background: #f2f2f2; }
         
-        /* زر الحذف */
         .btn-delete { color: #dc3545; cursor: pointer; border: none; background: transparent; font-size: 16px; font-weight: bold; line-height: 1; }
-        
         .stats-row { display: flex; justify-content: space-around; border: 1px solid #000; padding: 5px; font-weight: bold; background: #fafafa; margin-bottom: 5px; font-size: 13px; }
-        
-        /* القائمة العلوية */
         .no-print { padding: 15px; background: #fff; border-bottom: 3px solid var(--primary-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .user-credit { color: #ccc; font-size: 10px; text-align: center; margin: 5px; }
 
-        /* تنسيق الخطط */
         .plan-section { margin-top: 10px; border: 1px solid #000; page-break-inside: avoid; }
         .plan-header { color: white; padding: 5px; font-weight: bold; text-align: right; padding-right: 10px; font-size: 13px; }
         .plan-body { padding: 8px; font-size: 12px; }
-        
-        /* السماح بانقسام قائمة الأسماء لتذهب للصفحة التالية مع التواقيع */
-        .student-list-box { 
-            border: 1px dashed #ccc; padding: 5px; min-height: 25px; 
-            background: #fdfdfd; margin-bottom: 8px; line-height: 1.6; 
-            text-align: justify; 
-            page-break-inside: auto; /* السماح بالقص هنا */
-        }
-        
+        .student-list-box { border: 1px dashed #ccc; padding: 5px; min-height: 25px; background: #fdfdfd; margin-bottom: 8px; line-height: 1.6; text-align: justify; page-break-inside: auto; }
         .action-textarea { width: 100%; border: 1px solid #ddd; font-family: inherit; font-size: 12px; min-height: 40px; background: #fff; padding: 5px; }
         .plan-select { width: 100%; font-size: 11px; margin-bottom: 5px; padding: 3px; border: 1px solid var(--primary-blue); color: var(--primary-blue); background: #f0f8ff; }
         
@@ -81,45 +83,27 @@
         .average-header { background-color: #0d6efd !important; } 
         .enrichment-header { background-color: #198754 !important; } 
 
-        /* التواقيع */
-        .signatures-box { 
-            display: flex; justify-content: space-between; text-align: center; margin-top: 30px; 
-            font-size: 12px; font-weight: bold; 
-            page-break-inside: avoid; 
-        }
+        .signatures-box { display: flex; justify-content: space-between; text-align: center; margin-top: 30px; font-size: 12px; font-weight: bold; page-break-inside: avoid; }
         .sig-col { flex: 1; padding: 0 5px; }
         .sig-input { border: none; text-align: center; width: 100%; background: transparent; margin-top: 5px; font-weight: normal; }
 
-        /* === التحكم الذكي في الطباعة (الجدول السحري) === */
-        /* هذا الجدول سيحتوي قسم الخطط فقط في وضع الفصل */
+        /* التحكم في الهيكل للطباعة */
         .print-layout-table { width: 100%; border: none; border-collapse: collapse; }
-        .print-layout-table thead { display: table-header-group; } /* الترويسة تتكرر في كل صفحة */
+        .print-layout-table thead { display: table-header-group; }
         .print-layout-table tbody { display: table-row-group; }
-        .print-layout-table tfoot { display: table-footer-group; }
-        .print-layout-table td, .print-layout-table th { border: none; padding: 0; }
+        .print-layout-table td { border: none; padding: 0; }
 
-        /* التحكم في الأوضاع */
         .page-break-divider { display: none; }
         .signature-analysis { display: none; } 
         
-        /* وضع الفصل (Separate Mode) */
-        .mode-separate .page-break-divider { display: block; page-break-before: always; height: 0; margin: 0; }
-        .mode-separate .signature-analysis { display: flex; margin-bottom: 0; padding-top: 10px; }
-        
-        /* إخفاء التواقيع المزدوجة في الوضع المدمج */
-        .mode-merged .only-separate { display: none; }
-
-        @media print {
-            @page { margin: 0; size: auto; }
-            body { margin: 0; background: white; -webkit-print-color-adjust: exact; }
-            .no-print, .user-credit, #dlBtn, .delete-col, .plan-select { display: none !important; }
-            .printable-page { margin: 0; border: none; width: 100%; box-shadow: none; padding: 10mm 10mm; } 
-            .action-textarea { border: none; resize: none; overflow: hidden; }
-            .sig-input { border: none; }
-            td.delete-col, th.delete-col { display: none; }
-            /* إجبار الجدول على تكرار الترويسة */
-            thead { display: table-header-group; }
+        /* وضع الفصل: إضافة فاصل صفحة صريح */
+        .mode-separate .page-break-divider { 
+            display: block; 
+            page-break-before: always; /* هذا هو الأمر الوحيد الذي يفتح صفحة جديدة */
+            height: 0; margin: 0; overflow: hidden;
         }
+        .mode-separate .signature-analysis { display: flex; margin-bottom: 0; padding-top: 10px; }
+        .mode-merged .only-separate { display: none; }
 
         canvas { max-height: 130px; width: 100% !important; }
         .noborder { border: none; text-align: center; background: transparent; width: 100%; font-weight: bold; }
@@ -261,7 +245,6 @@
                 </td>
             </tr>
         </thead>
-        
         <tbody>
             <tr>
                 <td>
@@ -318,17 +301,13 @@
 <div class="user-credit">تم التطوير بواسطة أ. عبدالرحمن سعد الحجيلي</div>
 
 <script>
-    // === استنساخ الترويسة للصفحة الثانية ===
-    // ننسخ الترويسة ونضعها داخل الرأسية المتكررة للجدول
+    // === الدوال البرمجية ===
     const origHeader = document.querySelector('.header-table').outerHTML;
     document.getElementById('plansHeaderCopy').innerHTML = origHeader;
 
     function updateHeaderCopy() {
-        // تحديث النسخة عند أي تغيير
         const currentHeader = document.querySelector('#analysisContent .header-table').outerHTML;
         document.getElementById('plansHeaderCopy').innerHTML = currentHeader;
-        
-        // نقل قيم الـ Select يدوياً لأن HTML لا ينقلها
         const origSelects = document.querySelector('#analysisContent .header-table').querySelectorAll('select');
         const copySelects = document.getElementById('plansHeaderCopy').querySelectorAll('select');
         origSelects.forEach((sel, i) => { if(copySelects[i]) copySelects[i].value = sel.value; });
@@ -358,7 +337,6 @@
         fill('selRemedial', strategies.remedial);
         fill('selAverage', strategies.average);
         fill('selEnrichment', strategies.enrichment);
-        
         document.getElementById('txtRemedial').value = strategies.remedial.slice(0, 2).join(" - ");
         document.getElementById('txtAverage').value = strategies.average.slice(0, 2).join(" - ");
         document.getElementById('txtEnrichment').value = strategies.enrichment.slice(0, 2).join(" - ");
@@ -369,10 +347,7 @@
         const container = document.getElementById('capture');
         container.classList.remove('mode-separate', 'mode-merged');
         container.classList.add('mode-' + mode);
-        
-        if (mode === 'separate') {
-            updateHeaderCopy();
-        }
+        if (mode === 'separate') { updateHeaderCopy(); }
     }
 
     function syncSigs(source, index) {
@@ -420,7 +395,6 @@
     function updateAll() {
         const max = parseFloat(document.getElementById('maxGrade').value) || 20;
         const totalFasl = parseInt(document.getElementById('totalInClass').value) || 0;
-        
         const examName = getInputValue('examType', 'mExam');
         const subName = getInputValue('subject', 'mSub');
         const className = getInputValue('classGrade', 'mClass');
@@ -436,23 +410,12 @@
         students.forEach((s, i) => {
             const p = (s.grade/max)*100; sum += s.grade; grades.push(s.grade);
             if (p < 60) rList.push(s.name); else if (p >= 90) eList.push(s.name); else aList.push(s.name);
-
-            tbody.innerHTML += `
-            <tr>
-                <td>${toAr(i+1)}</td>
-                <td class="text-end px-2">${s.name}</td>
-                <td>${toAr(s.grade)}</td>
-                <td>${getT(p)}</td>
-                <td class="delete-col no-print">
-                    <button class="btn-delete" onclick="removeStudent(${i})">&times;</button>
-                </td>
-            </tr>`;
+            tbody.innerHTML += `<tr><td>${toAr(i+1)}</td><td class="text-end px-2">${s.name}</td><td>${toAr(s.grade)}</td><td>${getT(p)}</td><td class="delete-col no-print"><button class="btn-delete" onclick="removeStudent(${i})">&times;</button></td></tr>`;
         });
 
         document.getElementById('remedialNames').innerText = rList.length ? rList.join('، ') : 'لا يوجد';
         document.getElementById('averageNames').innerText = aList.length ? aList.join('، ') : 'لا يوجد';
         document.getElementById('enrichmentNames').innerText = eList.length ? eList.join('، ') : 'لا يوجد';
-
         document.getElementById('stTotal').innerText = toAr(totalFasl);
         document.getElementById('stPresent').innerText = toAr(students.length);
         document.getElementById('stAbsent').innerText = toAr(Math.max(0, totalFasl - students.length));
@@ -464,10 +427,7 @@
             document.getElementById('passRate').innerText = toAr(((grades.filter(g=>g>=max*0.5).length/students.length)*100).toFixed(1)) + '%';
             renderCharts(grades, max, avg, std);
         }
-        
-        if (document.querySelector('.mode-separate')) {
-            updateHeaderCopy();
-        }
+        if (document.querySelector('.mode-separate')) { updateHeaderCopy(); }
     }
 
     function getT(p) { if(p>=90) return 'ممتاز'; if(p>=80) return 'جيد جداً'; if(p>=70) return 'جيد'; if(p>=60) return 'مقبول'; return 'ضعيف'; }
@@ -484,7 +444,6 @@
 
     function exportToPDF() {
         const elem = document.getElementById('capture');
-        // تم زيادة جودة الصورة قليلاً لضمان وضوح النصوص الصغيرة
         const opt = { margin: 0, filename: 'تحليل_النتائج.pdf', image: { type: 'jpeg', quality: 1.0 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
         html2pdf().set(opt).from(elem).save();
     }
